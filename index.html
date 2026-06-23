@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlanetSpark Course Details</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:url('https://images.unsplash.com/photo-1516280440614-37939bbacd81?q=80&w=2070')
+center/cover no-repeat;
+min-height:100vh;
+padding:40px;
+position:relative;
+}
+
+.overlay{
+position:fixed;
+inset:0;
+background:rgba(10,10,30,.75);
+}
+
+.container{
+position:relative;
+z-index:2;
+max-width:1000px;
+margin:auto;
+}
+
+.header{
+text-align:center;
+color:white;
+margin-bottom:30px;
+}
+
+.header h1{
+font-size:42px;
+margin-bottom:10px;
+}
+
+.header p{
+font-size:18px;
+}
+
+.card{
+backdrop-filter:blur(18px);
+background:rgba(255,255,255,.12);
+border:1px solid rgba(255,255,255,.2);
+padding:35px;
+border-radius:25px;
+box-shadow:0 20px 60px rgba(0,0,0,.35);
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-bottom:25px;
+}
+
+td{
+padding:15px;
+border:1px solid rgba(255,255,255,.2);
+color:white;
+}
+
+td:first-child{
+font-weight:600;
+width:30%;
+}
+
+input,
+select{
+width:100%;
+padding:14px;
+border:none;
+outline:none;
+border-radius:12px;
+margin-top:8px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+}
+
+.field label{
+color:white;
+font-weight:500;
+}
+
+.discount-section{
+margin-top:25px;
+}
+
+.discount-section label{
+color:white;
+font-weight:600;
+}
+
+button{
+background:linear-gradient(135deg,#ff7b00,#ff4d00);
+color:white;
+border:none;
+padding:15px 25px;
+border-radius:12px;
+cursor:pointer;
+font-size:16px;
+font-weight:600;
+margin-top:15px;
+transition:.3s;
+}
+
+button:hover{
+transform:translateY(-3px);
+}
+
+.result-box,
+.payment-section,
+.payment-card{
+display:none;
+}
+
+.result-box{
+margin-top:30px;
+background:white;
+padding:25px;
+border-radius:20px;
+}
+
+.result-box h2{
+color:#ff4d00;
+}
+
+.result-box h3{
+font-size:32px;
+margin-top:10px;
+color:#22c55e;
+}
+
+.payment-section{
+margin-top:30px;
+background:white;
+padding:25px;
+border-radius:20px;
+}
+
+.payment-buttons{
+display:flex;
+gap:15px;
+margin-top:20px;
+flex-wrap:wrap;
+}
+
+.payment-card{
+margin-top:20px;
+background:#f7f7f7;
+padding:20px;
+border-radius:15px;
+}
+
+#emiResult{
+margin-top:20px;
+font-size:18px;
+font-weight:600;
+line-height:35px;
+}
+
+@media(max-width:768px){
+
+.grid{
+grid-template-columns:1fr;
+}
+
+.header h1{
+font-size:30px;
+}
+}
+</style>
+</head>
+
+<body>
+
+<div class="overlay"></div>
+
+<div class="container">
+
+<div class="header">
+<h1>🎤 PlanetSpark Course Details</h1>
+<p>Empowering Young Speakers & Future Leaders</p>
+</div>
+
+<div class="card">
+
+<table>
+<tr>
+<td>Child Name</td>
+<td><input type="text" placeholder="Enter Child Name"></td>
+</tr>
+
+<tr>
+<td>Grade</td>
+<td><input type="text" placeholder="Enter Grade"></td>
+</tr>
+</table>
+
+<div class="grid">
+
+<div class="field">
+<label>No. of Learn Classes</label>
+<input type="number">
+</div>
+
+<div class="field">
+<label>No. of Practice Classes</label>
+<input type="number">
+</div>
+
+<div class="field">
+<label>No. of Performance Hours</label>
+<input type="number">
+</div>
+
+<div class="field">
+<label>Tenure</label>
+<input type="text" placeholder="Example: 12 Months">
+</div>
+
+<div class="field">
+<label>Total Course Fees (₹)</label>
+<input type="number" id="totalFees">
+</div>
+
+<div class="field">
+<label>Coupon Code</label>
+<input type="text">
+</div>
+
+</div>
+
+<div class="discount-section">
+
+<label>Discount Percentage (%)</label>
+
+<input
+type="number"
+id="discount"
+placeholder="20 or 30">
+
+<button onclick="calculateDiscount()">
+Calculate Discounted Fees
+</button>
+
+</div>
+
+<div id="discountBox" class="result-box">
+
+<h2>Discount Summary</h2>
+
+<p>Total Fees: ₹ <span id="originalFee"></span></p>
+
+<p>Discount: <span id="discountValue"></span>%</p>
+
+<h3>
+Final Fees: ₹
+<span id="finalFee"></span>
+</h3>
+
+<button onclick="showPayment()">
+Proceed To Payment Method
+</button>
+
+</div>
+
+<div id="paymentSection" class="payment-section">
+
+<h2>Select Payment Method</h2>
+
+<div class="payment-buttons">
+
+<button onclick="showOneTime()">
+One Time
+</button>
+
+<button onclick="showEMI()">
+No Cost EMI
+</button>
+
+</div>
+
+<div id="oneTimeBox" class="payment-card">
+<h3>One Time Payment</h3>
+<h2>₹ <span id="oneTimeAmount"></span></h2>
+</div>
+
+<div id="emiBox" class="payment-card">
+
+<h3>No Cost EMI</h3>
+
+<input
+type="number"
+id="regFee"
+placeholder="Registration Fees">
+
+<select id="months">
+<option value="3">3 Months</option>
+<option value="6">6 Months</option>
+<option value="9">9 Months</option>
+<option value="12">12 Months</option>
+<option value="18">18 Months</option>
+</select>
+
+<button onclick="calculateEMI()">
+Calculate EMI
+</button>
+
+<div id="emiResult"></div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+let finalFee = 0;
+
+function calculateDiscount(){
+
+let total =
+parseFloat(
+document.getElementById("totalFees").value
+);
+
+let discount =
+parseFloat(
+document.getElementById("discount").value
+);
+
+if(!total || !discount){
+alert("Enter Fees & Discount");
+return;
+}
+
+finalFee =
+total -
+(total * discount / 100);
+
+document.getElementById("discountBox").style.display = "block";
+
+document.getElementById("originalFee").innerText =
+total.toLocaleString();
+
+document.getElementById("discountValue").innerText =
+discount;
+
+document.getElementById("finalFee").innerText =
+finalFee.toLocaleString();
+
+document.getElementById("oneTimeAmount").innerText =
+finalFee.toLocaleString();
+}
+
+function showPayment(){
+document.getElementById("paymentSection").style.display = "block";
+}
+
+function showOneTime(){
+
+document.getElementById("oneTimeBox").style.display = "block";
+document.getElementById("emiBox").style.display = "none";
+
+let flexibilityAmount = finalFee * 0.10;
+let payableAmount = finalFee - flexibilityAmount;
+
+document.getElementById("oneTimeBox").innerHTML = `
+
+<h3>One Time Payment</h3>
+
+<p><strong>Final Fees :</strong> ₹${finalFee.toLocaleString()}</p>
+
+<p><strong>One Time Payment Flexibility (10%) :</strong>
+₹${flexibilityAmount.toFixed(0)}</p>
+
+<h2 style="color:green;margin-top:15px;">
+Payable Amount : ₹${payableAmount.toFixed(0)}
+</h2>
+
+`;
+}
+
+function showEMI(){
+
+document.getElementById("emiBox").style.display = "block";
+document.getElementById("oneTimeBox").style.display = "none";
+}
+
+function calculateEMI(){
+
+let regFee =
+parseFloat(
+document.getElementById("regFee").value
+) || 0;
+
+let months =
+parseInt(
+document.getElementById("months").value
+);
+
+let remaining =
+finalFee - regFee;
+
+let emi =
+remaining / months;
+
+document.getElementById("emiResult").innerHTML =
+
+`
+<p>Final Fees: ₹${finalFee.toLocaleString()}</p>
+<p>Registration Fees: ₹${regFee.toLocaleString()}</p>
+<p>Remaining Fees: ₹${remaining.toLocaleString()}</p>
+<p>Monthly EMI (${months} Months): ₹${emi.toFixed(0)}</p>
+`;
+}
+</script>
+
+</body>
+</html>
